@@ -3,7 +3,7 @@ from tkinter import ttk
 
 main = Tk()
 
-MainFrame = ttk.Frame(main,padding=40,takefocus=True)
+MainFrame = ttk.Frame(main,padding=40,takefocus=True,)
 MainFrame.grid()
 
 ttk.Label(MainFrame,text="I am a lable").grid(column=1,row=1)

@@ -64,7 +64,6 @@ except:
     sleep(5)
     exit()
 
-
 MyMatches = watcher.match.matchlist_by_puuid(MyReg, MyAccount["puuid"])
 
 wb = Workbook()

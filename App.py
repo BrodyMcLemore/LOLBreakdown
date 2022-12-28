@@ -23,6 +23,7 @@ MainFrame.grid(column=0, row=0, sticky="NW")
 # App Variables
 PlayerName = StringVar()
 RegionVal = StringVar()
+SummonerName = IntVar(value=0)
 
 # Working Variables
 RegionCommon = [
@@ -50,49 +51,61 @@ RegionServer = {
     "Japan": "jp1"
 }
 CallValues = ["summonerName", "championName", "teamPosition",
-              "kills", "totalDamageDealt", "goldEarned", "visionScore", "win"]
+              "kills", "totalDamageDealt", "goldEarned", "win"]
 GameCount = 0
 Row = 1
 watcher = LolWatcher(API_KEY)
 
+
 # Functions and Backend
-
-
 def Run():
     Region = RegionServer[RegionVal.get()]
     AccountName = PlayerName.get()
     AccountInfo = watcher.summoner.by_name(Region, AccountName)
     MatchList = watcher.match.matchlist_by_puuid(Region, AccountInfo["puuid"])
     wb = Workbook()
-    OutputGames(Region, MatchList, GameCount, Row, CallValues, watcher, wb)
+    OutputGames(Region, MatchList, GameCount, Row, CallValues, watcher, wb,AccountName)
     if SaveBook(wb, AccountName) == "Success":
         messagebox.showinfo(
             "Success", "Your Game Data has been saved to a new folder named 'Output'.")
     elif SaveBook(wb, AccountName) == "Fail":
         messagebox.showerror(
-            "Failure", "Your Game Data did NOT save correctly, please try again")
+            "Failure", "Your Game Data did NOT save correctly, please try again.")
 
 
 # Building the Front End
-# Labels, Input boxes, and Submit Buttons
+# Player Name and Region Labels and Entries
 PlayerNameLabel = ttk.Label(MainFrame, text="Player Name:", font=(
-    'calibre', 10, 'bold'), anchor="center")
+    'calibre', 12, 'bold'), anchor="center",takefocus=True)
 RegionLabel = ttk.Label(MainFrame, text="Region:", font=(
-    'calibre', 10, 'bold'), justify="left", anchor="center")
+    'calibre', 12, 'bold'), justify="left", anchor="center")
 PlayerNameEntry = ttk.Entry(
     MainFrame, textvariable=PlayerName, font=('calibre', 10, 'normal'))
 RegionComboBox = ttk.Combobox(MainFrame, textvariable=RegionVal,
                               values=RegionCommon, state="readonly", font=('calibre', 10, 'normal'))
+
+# CallValue Checkboxes and Label
+CallValuesLabel = ttk.Label(MainFrame,text="Reported Values",font=(
+    'calibre', 12, 'bold'), anchor="center")
+SummonerNameBox = ttk.Checkbutton(MainFrame,text="Summoner Name",variable=SummonerName)
+
+# Submit button
 SubmitButton = ttk.Button(MainFrame, text="Submit", command=Run)
 
-# Widget Positions
-PlayerNameLabel.grid(column=1, row=2, pady=5)
-PlayerNameEntry.grid(column=2, row=2)
-RegionLabel.grid(column=1, row=3, pady=5)
-RegionComboBox.grid(column=2, row=3,)
-SubmitButton.grid(column=1, row=4, pady=5, columnspan=2)
+# Player Name and Region input positions 
+PlayerNameLabel.grid(column=1, row=1, pady=5)
+PlayerNameEntry.grid(column=2, row=1)
+RegionLabel.grid(column=1, row=2, pady=5)
+RegionComboBox.grid(column=2, row=2,)
 
-# Setting the Default value for the RegionComboBox to "North America (na)"
+# CallValues Checkboxes and Label positions 
+CallValuesLabel.grid(column=1,row=3,columnspan=3)
+SummonerNameBox.grid(column=1,row=4)
+
+# Submit button position
+SubmitButton.grid(column=1, row=5, pady=5, columnspan=2)
+
+# Setting the Default value for Widgets
 RegionComboBox.set("North America")
 
 

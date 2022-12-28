@@ -21,17 +21,20 @@ def SaveBook(Workbook, PlayerName):
             return "Fail"
 
 
-def OutputGames(Region, MatchList, GameCount, Row, CallValues, Watcher, Workbook):
+def OutputGames(Region, MatchList, GameCount, Row, CallValues, Watcher, Workbook,PlayerName):
     watcher = Watcher
     wb = Workbook
+    wb.create_sheet(str(PlayerName))
     while GameCount <= 17:
         MatchDetail = watcher.match.by_id(Region, MatchList[GameCount])
         if MatchDetail["info"]["gameMode"] == "CLASSIC":
-            MakeBoilerPlateCells(wb["Sheet"], Row, MatchDetail)
-            OutputRed(wb["Sheet"], MatchDetail, Row, CallValues)
-            OutputBlue(wb["Sheet"], MatchDetail, Row, CallValues)
+            MakeBoilerPlateCells(wb[str(PlayerName)], Row, MatchDetail,CallValues)
+            OutputRed(wb[str(PlayerName)], MatchDetail, Row, CallValues)
+            OutputBlue(wb[str(PlayerName)], MatchDetail, Row, CallValues)
             Row += 8
         GameCount += 1
+    del wb["Sheet"]
+
 
 
 def OutputRed(worksheet, MatchDetail, startRow, CallValues):

@@ -50,8 +50,7 @@ RegionServer = {
     "Turkey": "tr1",
     "Japan": "jp1"
 }
-CallValues = ["summonerName", "championName", "teamPosition",
-              "kills", "totalDamageDealt", "goldEarned", "win"]
+CallValues = []
 GameCount = 0
 Row = 1
 watcher = LolWatcher(API_KEY)
@@ -85,9 +84,11 @@ RegionComboBox = ttk.Combobox(MainFrame, textvariable=RegionVal,
                               values=RegionCommon, state="readonly", font=('calibre', 10, 'normal'))
 
 # CallValue Checkboxes and Label
+# List of call values: Summoner Name, Champion, Runes, Summoner spells, KDA (Just kills), damagedelt, vision score (wards?), CS, Items, role, level
 CallValuesLabel = ttk.Label(MainFrame,text="Reported Values",font=(
     'calibre', 12, 'bold'), anchor="center")
 SummonerNameBox = ttk.Checkbutton(MainFrame,text="Summoner Name",variable=SummonerName)
+
 
 # Submit button
 SubmitButton = ttk.Button(MainFrame, text="Submit", command=Run)

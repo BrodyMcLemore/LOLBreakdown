@@ -4,6 +4,7 @@ from Project_Files.Func import OutputGames, SaveBook
 from openpyxl import Workbook
 from riotwatcher import LolWatcher
 from Project_Files.config import API_KEY
+from Project_Files.DictCalls import GetCurrentVersion
 
 
 # Top Level Window handling
@@ -50,7 +51,7 @@ RegionServer = {
     "Turkey": "tr1",
     "Japan": "jp1"
 }
-CallValues = []
+CallValues = ["inventory"]
 GameCount = 0
 Row = 1
 watcher = LolWatcher(API_KEY)
@@ -63,7 +64,7 @@ def Run():
     AccountInfo = watcher.summoner.by_name(Region, AccountName)
     MatchList = watcher.match.matchlist_by_puuid(Region, AccountInfo["puuid"])
     wb = Workbook()
-    OutputGames(Region, MatchList, GameCount, Row, CallValues, watcher, wb,AccountName)
+    OutputGames(Region, MatchList, GameCount, Row, CallValues, watcher, wb,AccountName,GetCurrentVersion())
     if SaveBook(wb, AccountName) == "Success":
         messagebox.showinfo(
             "Success", "Your Game Data has been saved to a new folder named 'Output'.")

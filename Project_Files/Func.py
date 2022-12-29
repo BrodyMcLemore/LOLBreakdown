@@ -43,20 +43,7 @@ def OutputRed(worksheet, MatchDetail, startRow, CallValues, CurrentVersion):
     StartWorkRow = startRow + 3
     for row in range(5):
         for col in range(len(CallValues)):
-            if CallValues[col] != "kills":
-                if CallValues[col] == "inventory":
-                    Items = ["item0","item1","item2","item3","item4","item5"]
-                    ItemNames =[]
-                    ItemsDict = ItemDict(CurrentVersion)
-                    CalledValue = ws.cell(StartWorkRow+row, col+1)
-                    for i in range(5):
-                        if str(MatchDetail["info"]['participants'][row][Items[i]]) != "0":
-                            ItemNames.append(ItemsDict[str(MatchDetail["info"]['participants'][row][Items[i]])])
-                    CalledValue.value = str(", ".join(ItemNames))
-                else:
-                    CalledValue = ws.cell(StartWorkRow+row, col+1)
-                    CalledValue.value = MatchDetail["info"]['participants'][row][CallValues[col]]
-            else:
+            if CallValues[col] == "kills":
                 CalledValue = ws.cell(StartWorkRow+row, col+1)
                 Kills = str(MatchDetail["info"]['participants'][row]["kills"])
                 Deaths = str(MatchDetail["info"]
@@ -64,6 +51,25 @@ def OutputRed(worksheet, MatchDetail, startRow, CallValues, CurrentVersion):
                 Assists = str(MatchDetail["info"]
                               ['participants'][row]["assists"])
                 CalledValue.value = Kills + "/" + Deaths + "/" + Assists
+
+            elif CallValues[col] == "inventory":
+                Items = ["item0","item1","item2","item3","item4","item5"]
+                ItemNames =[]
+                ItemsDict = ItemDict(CurrentVersion)
+                CalledValue = ws.cell(StartWorkRow+row, col+1)
+                for i in range(5):
+                    print(str(MatchDetail["info"]['participants'][row][Items[i]]))
+                    if str(MatchDetail["info"]['participants'][row][Items[i]]) != "0":
+                        ItemNames.append(ItemsDict[str(MatchDetail["info"]['participants'][row][Items[i]])])
+                CalledValue.value = str(str(", ".join(ItemNames)))
+
+            elif CallValues[col] == "summonerSpells":
+                SummonerSpells = SummonerSpellDict(CurrentVersion)
+                CalledValue = ws.cell(StartWorkRow+row, col+1)
+                CalledValue.value = str(SummonerSpells[str(MatchDetail["info"]['participants'][row]["summoner1Id"])]) +" and "+ str(SummonerSpells[str(MatchDetail["info"]['participants'][row+5]["summoner2Id"])])
+            else:
+                CalledValue = ws.cell(StartWorkRow+row, col+1)
+                CalledValue.value = MatchDetail["info"]['participants'][row][CallValues[col]]
 
 
 
@@ -72,24 +78,32 @@ def OutputBlue(worksheet, MatchDetail, startRow, CallValues, CurrentVersion):
     StartWorkRow = startRow + 3
     for row in range(5):
         for col in range(len(CallValues)):
-            if CallValues[col] != "kills":
-                if CallValues[col] == "inventory":
-                    Items = ["item0","item1","item2","item3","item4","item5"]
-                    ItemNames =[]
-                    ItemsDict = ItemDict(CurrentVersion)
-                    CalledValue = ws.cell(StartWorkRow+row, col+2+len(CallValues))
-                    for i in range(5):
-                        if str(MatchDetail["info"]['participants'][row+5][Items[i]]) != "0":
-                            ItemNames.append(ItemsDict[str(MatchDetail["info"]['participants'][row+5][Items[i]])])
-                    CalledValue.value = str(str(", ".join(ItemNames)))
-                else:
-                    CalledValue = ws.cell(StartWorkRow+row, col+2+len(CallValues))
-                    CalledValue.value = MatchDetail["info"]['participants'][row][CallValues[col]]
-            else:
-                CalledValue = ws.cell(StartWorkRow+row, col+1)
-                Kills = str(MatchDetail["info"]['participants'][row]["kills"])
+            if CallValues[col] == "kills":
+                CalledValue = ws.cell(StartWorkRow+row, col+2+len(CallValues))
+                Kills = str(MatchDetail["info"]['participants'][row+5]["kills"])
                 Deaths = str(MatchDetail["info"]
-                             ['participants'][row]["deaths"])
+                             ['participants'][row+5]["deaths"])
                 Assists = str(MatchDetail["info"]
-                              ['participants'][row]["assists"])
+                              ['participants'][row+5]["assists"])
                 CalledValue.value = Kills + "/" + Deaths + "/" + Assists
+
+            elif CallValues[col] == "inventory":
+                Items = ["item0","item1","item2","item3","item4","item5"]
+                ItemNames =[]
+                ItemsDict = ItemDict(CurrentVersion)
+                CalledValue = ws.cell(StartWorkRow+row, col+2+len(CallValues))
+                for i in range(5):
+                    print(str(MatchDetail["info"]['participants'][row+5][Items[i]]))
+                    if str(MatchDetail["info"]['participants'][row+5][Items[i]]) != "0":
+                        ItemNames.append(ItemsDict[str(MatchDetail["info"]['participants'][row+5][Items[i]])])
+                CalledValue.value = str(str(", ".join(ItemNames)))
+
+            elif CallValues[col] == "summonerSpells":
+                SummonerSpells = SummonerSpellDict(CurrentVersion)
+                CalledValue = ws.cell(StartWorkRow+row, col+2+len(CallValues))
+                print(str(SummonerSpells[str(MatchDetail["info"]['participants'][row+5]["summoner1Id"])]) +" and "+ str(SummonerSpells[str(MatchDetail["info"]['participants'][row+5]["summoner2Id"])]))
+                CalledValue.value = str(SummonerSpells[str(MatchDetail["info"]['participants'][row+5]["summoner1Id"])]) +" and "+ str(SummonerSpells[str(MatchDetail["info"]['participants'][row+5]["summoner2Id"])])
+            else:
+                CalledValue = ws.cell(StartWorkRow+row, col+2+len(CallValues))
+                CalledValue.value = MatchDetail["info"]['participants'][row+5][CallValues[col]]
+                

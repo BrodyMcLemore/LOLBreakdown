@@ -4,20 +4,22 @@ from riotwatcher import LolWatcher
 import os
 from Project_Files.DictCalls import *
 from tkinter import ttk
+from tkinter.filedialog import askdirectory
 
 
 def SaveBook(Workbook, PlayerName):
     wb = Workbook
-    if not os.path.exists(os.getcwd()+"/Output"):
-        os.mkdir(str(os.getcwd()+"/Output"))
+    FileLocation =  askdirectory()
+    if not os.path.exists(FileLocation+"/Output"):
+        os.mkdir(str(FileLocation+"/Output"))
         try:
-            wb.save(str(os.getcwd())+"/Output/" + PlayerName + ".xlsx")
+            wb.save(str(FileLocation)+"/Output/" + PlayerName + ".xlsx")
             return "Success"
         except:
             return "Fail"
     else:
         try:
-            wb.save(str(os.getcwd())+"/Output/" + PlayerName + ".xlsx")
+            wb.save(str(FileLocation)+"/Output/" + PlayerName + ".xlsx")
             return "Success"
         except:
             return "Fail"

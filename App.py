@@ -5,6 +5,7 @@ from openpyxl import Workbook
 from riotwatcher import LolWatcher
 from Project_Files.config import API_KEY
 from Project_Files.DictCalls import GetCurrentVersion
+import os 
 
 
 # Top Level Window handling
@@ -13,7 +14,8 @@ MainWin = Tk()
 MainWin.title("LOL Breakdown")
 MainWin.resizable(width=False, height=False)
 MainWin.geometry("500x250")
-MainWin.iconbitmap("Project_Files\Logo.ico")
+BaseDir = os.path.dirname(__file__)
+MainWin.iconbitmap(os.path.join(BaseDir,"Icons","Logo.ico"))
 
 # Handling the Frame
 MainFrame = Frame(MainWin)
@@ -37,7 +39,8 @@ CreepScore = IntVar(value=0)
 Items = IntVar(value=0)
 
 
-# Working Variables
+# Working Variables and Dictionaries 
+# Working Dictionaries 
 RegionCommon = [
     "North America",
     "Brazil",
@@ -75,12 +78,21 @@ VariableCall = {
     "CreepScore": "totalMinionsKilled",
     "Items": "inventory"
 }
+
+# Working Variables 
 GameCount = 0
 Row = 1
 watcher = LolWatcher(API_KEY)
 
 
 # Functions and Backend
+try:
+    from ctypes import windll
+    myappid = "LOLBreakdown"
+    windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+except ImportError:
+    pass
+
 def GetCallVal():
     CallValues = []
     if SummonerName.get() == 1:

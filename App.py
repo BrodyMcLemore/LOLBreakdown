@@ -23,7 +23,7 @@ MainFrame.grid(column=0, row=0, sticky="NW")
 # Setting Global Variables
 # App Variables
 PlayerName = StringVar()
-RegionVal = StringVar()
+RegionVal = StringVar(value="North America")
 SummonerName = IntVar(value=1)
 ChampionName = IntVar(value=1)
 KDA = IntVar(value=0)
@@ -73,7 +73,7 @@ VariableCall = {
     "VisionScore" : "visionScore",
     "SummonerSpells" : "summonerSpells",
     "CreepScore" : "totalMinionsKilled",
-    "Items" : "items"
+    "Items" : "inventory"
 }
 GameCount = 0
 Row = 1
@@ -109,16 +109,20 @@ def GetCallVal():
 def Run():
     Region = RegionServer[RegionVal.get()]
     AccountName = PlayerName.get()
-    AccountInfo = watcher.summoner.by_name(Region, AccountName)
+    try:
+        AccountInfo = watcher.summoner.by_name(Region, AccountName)
+    except:
+        messagebox.showerror("Name Error","The Player Name you have entered is not valid, please try again.")
+        return
     MatchList = watcher.match.matchlist_by_puuid(Region, AccountInfo["puuid"])
     wb = Workbook()
     OutputGames(Region, MatchList, GameCount, Row, GetCallVal(), watcher, wb,AccountName,GetCurrentVersion())
     if SaveBook(wb, AccountName) == "Success":
         messagebox.showinfo(
-            "Success", "Your Game Data has been saved to a new folder named 'Output'.")
+            "Success", "Your Game Data has been saved to Output/"+AccountName)
     elif SaveBook(wb, AccountName) == "Fail":
         messagebox.showerror(
-            "Failure", "Your Game Data did NOT save correctly, please try again.")
+            "Failure", "Your Game Data did NOT save correctly, please close the file and try again.")
 
 
 # Building the Front End
@@ -131,9 +135,9 @@ PlayerNameEntry = ttk.Entry(
     MainFrame, textvariable=PlayerName, font=('calibre', 10, 'normal'))
 RegionComboBox = ttk.Combobox(MainFrame, textvariable=RegionVal,
                               values=RegionCommon, state="readonly", font=('calibre', 10, 'normal'))
+ProgressBar = ttk.Progressbar(MainFrame,orient="horizontal",length=300  ,mode='determinate')
 
 # CallValue Checkboxes and Label
-# List of call values: Summoner Name, Champion, Runes, Summoner spells, KDA (Just kills), damagedelt, vision score (wards?), CS, Items, role, level
 CallValuesLabel = ttk.Label(MainFrame,text="Reported Values",font=(
     'calibre', 12, 'bold'), anchor="center")
 SummonerNameBox = ttk.Checkbutton(MainFrame,text="Summoner Name",variable=SummonerName)
@@ -172,12 +176,10 @@ CreepScoreBox.grid(column=1, row=7, pady=2,)
 ItemsBox.grid(column=2, row=7, pady=2,)
 
 
+
 # Submit button position
 SubmitButton.grid(column=1, row=8, pady=2,columnspan=3)
 
-
-# Setting the Default value for Widgets
-RegionComboBox.set("North America")
 
 
 # Running the Window

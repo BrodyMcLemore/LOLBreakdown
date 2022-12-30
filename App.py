@@ -130,15 +130,19 @@ def Run():
             "Name Error", "The Player Name you have entered is not valid, please try again.")
         return
     MatchList = watcher.match.matchlist_by_puuid(Region, AccountInfo["puuid"])
-    wb = Workbook()
-    OutputGames(Region, MatchList, GameCount, Row, GetCallVal(),
-                watcher, wb, AccountName, GetCurrentVersion())
-    if SaveBook(wb, AccountName) == "Success":
-        messagebox.showinfo(
-            "Success", "Your Game Data has been saved to Output/"+AccountName)
-    elif SaveBook(wb, AccountName) == "Fail":
+    if len(GetCallVal()) <= 0:
         messagebox.showerror(
-            "Failure", "Your Game Data did NOT save correctly, please close the file and try again.")
+            "Failure", "You did not select any data options, please select at least 1 and try again.")
+    else:
+        wb = Workbook()
+        OutputGames(Region, MatchList, GameCount, Row, GetCallVal(),
+                    watcher, wb, AccountName, GetCurrentVersion())
+        if SaveBook(wb, AccountName) == "Success":
+            messagebox.showinfo(
+                "Success", "Your Game Data has been saved to Output/"+AccountName)
+        elif SaveBook(wb, AccountName) == "Fail":
+            messagebox.showerror(
+                "Failure", "Your Game Data did NOT save correctly, please close the file and try again.")
 
 
 # Building the Front End

@@ -33,11 +33,13 @@ def MakeBoilerPlateCells(worksheet, startRow, matchDetail,CellValues):
         cell = ws.cell(startRow+2, i+1)
         cell.value = BoilerPlateCellValues[i]
         cell.font = Font(bold=True)
+        cell.alignment = Alignment(horizontal='center')
     # Blue Team
     for i in range(len(BoilerPlateCellValues)):
         cell = ws.cell(startRow+2, i+len(BoilerPlateCellValues)+2)
         cell.value = BoilerPlateCellValues[i]
         cell.font = Font(bold=True)
+        cell.alignment = Alignment(horizontal='center')
     # Divider
     for i in range(7):
         cell = ws.cell(startRow+i+1, len(BoilerPlateCellValues)+1)

@@ -32,23 +32,16 @@ def ItemDict(CurrentVersion):
             continue
     return ItemsDict
 
-
-RuneDict = {
-"8112" : "Electrocute",
-"8124" : "Predator",
-"8128" : "Dark Harvest",
-"9923" : "Hail of Blades",
-"8351" : "Glacial Augment",
-"8360" : "Unsealed Spellbook",
-"8369" : "First Strike",
-"8005" : "Press the Attack",
-"8008" : "Lethal Tempo",
-"8021" : "Fleet Footwork",
-"8010" : "Conqueror",
-"8437" : "Grasp of the Undying",
-"8439" : "Aftershock",
-"8465" : "Guardian",
-"8214" : "Summon Aery",
-"8229" : "Arcane Comet",
-"8230" : "Phase Rush"
-}
+def RuneDict(CurrentVersion):
+    RunesDict = MakeDict()
+    ListRunes = json.loads(urlopen("https://ddragon.leagueoflegends.com/cdn/"+str(CurrentVersion)+"/data/en_US/runesReforged.json").read())
+    for y in range(5):
+        for x in range(5):
+         for z in range(5):
+            try:
+                RunesDict.key = str(ListRunes[y]["slots"][x]["runes"][z]["id"])
+                RunesDict.value = str(ListRunes[y]["slots"][x]["runes"][z]["name"])
+                RunesDict.add(RunesDict.key, RunesDict.value)
+            except:
+                continue
+    return RunesDict

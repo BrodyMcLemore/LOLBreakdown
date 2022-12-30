@@ -58,7 +58,6 @@ def OutputRed(worksheet, MatchDetail, startRow, CallValues, CurrentVersion):
                 ItemsDict = ItemDict(CurrentVersion)
                 CalledValue = ws.cell(StartWorkRow+row, col+1)
                 for i in range(5):
-                    print(str(MatchDetail["info"]['participants'][row][Items[i]]))
                     if str(MatchDetail["info"]['participants'][row][Items[i]]) != "0":
                         ItemNames.append(ItemsDict[str(MatchDetail["info"]['participants'][row][Items[i]])])
                 CalledValue.value = str(str(", ".join(ItemNames)))
@@ -67,6 +66,18 @@ def OutputRed(worksheet, MatchDetail, startRow, CallValues, CurrentVersion):
                 SummonerSpells = SummonerSpellDict(CurrentVersion)
                 CalledValue = ws.cell(StartWorkRow+row, col+1)
                 CalledValue.value = str(SummonerSpells[str(MatchDetail["info"]['participants'][row]["summoner1Id"])]) +" and "+ str(SummonerSpells[str(MatchDetail["info"]['participants'][row+5]["summoner2Id"])])
+            
+            elif CallValues[col] == "runes":
+                RunesDict = RuneDict(CurrentVersion)
+                CalledValue = ws.cell(StartWorkRow+row, col+1)
+                Runes = []
+                for y in range(3):
+                    for x in range(4):
+                        try:
+                            Runes.append(RunesDict[str(MatchDetail["info"]["participants"][row]["perks"]["styles"][y]["selections"][x]["perk"])])
+                        except:
+                            continue
+                CalledValue.value = str(Runes[0] + " and "+ Runes[4])
             else:
                 CalledValue = ws.cell(StartWorkRow+row, col+1)
                 CalledValue.value = MatchDetail["info"]['participants'][row][CallValues[col]]
@@ -93,7 +104,6 @@ def OutputBlue(worksheet, MatchDetail, startRow, CallValues, CurrentVersion):
                 ItemsDict = ItemDict(CurrentVersion)
                 CalledValue = ws.cell(StartWorkRow+row, col+2+len(CallValues))
                 for i in range(5):
-                    print(str(MatchDetail["info"]['participants'][row+5][Items[i]]))
                     if str(MatchDetail["info"]['participants'][row+5][Items[i]]) != "0":
                         ItemNames.append(ItemsDict[str(MatchDetail["info"]['participants'][row+5][Items[i]])])
                 CalledValue.value = str(str(", ".join(ItemNames)))
@@ -101,8 +111,19 @@ def OutputBlue(worksheet, MatchDetail, startRow, CallValues, CurrentVersion):
             elif CallValues[col] == "summonerSpells":
                 SummonerSpells = SummonerSpellDict(CurrentVersion)
                 CalledValue = ws.cell(StartWorkRow+row, col+2+len(CallValues))
-                print(str(SummonerSpells[str(MatchDetail["info"]['participants'][row+5]["summoner1Id"])]) +" and "+ str(SummonerSpells[str(MatchDetail["info"]['participants'][row+5]["summoner2Id"])]))
                 CalledValue.value = str(SummonerSpells[str(MatchDetail["info"]['participants'][row+5]["summoner1Id"])]) +" and "+ str(SummonerSpells[str(MatchDetail["info"]['participants'][row+5]["summoner2Id"])])
+            
+            elif CallValues[col] == "runes":
+                RunesDict = RuneDict(CurrentVersion)
+                CalledValue = ws.cell(StartWorkRow+row, col+2+len(CallValues))
+                Runes = []
+                for y in range(3):
+                    for x in range(4):
+                        try:
+                            Runes.append(RunesDict[str(MatchDetail["info"]["participants"][row+5]["perks"]["styles"][y]["selections"][x]["perk"])])
+                        except:
+                            continue
+                CalledValue.value = str(Runes[0] + " and "+ Runes[4])
             else:
                 CalledValue = ws.cell(StartWorkRow+row, col+2+len(CallValues))
                 CalledValue.value = MatchDetail["info"]['participants'][row+5][CallValues[col]]

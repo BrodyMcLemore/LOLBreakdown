@@ -51,7 +51,7 @@ RegionServer = {
     "Turkey": "tr1",
     "Japan": "jp1"
 }
-CallValues = ["inventory","summonerSpells"]
+CallValues = ["runes"]
 GameCount = 0
 Row = 1
 watcher = LolWatcher(API_KEY)

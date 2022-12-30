@@ -3,21 +3,22 @@ from openpyxl.styles import Alignment, PatternFill, Font
 from datetime import datetime
 
 
-def MakeBoilerPlateCells(worksheet, startRow, matchDetail,CellValues):
+def MakeBoilerPlateCells(worksheet, startRow, matchDetail, CellValues):
     ws = worksheet
     BoilerPlateCellValues = CellValues
-    ws.merge_cells(start_row=startRow, start_column=1, end_row=startRow, end_column=len(BoilerPlateCellValues))
+    ws.merge_cells(start_row=startRow, start_column=1,
+                   end_row=startRow, end_column=len(BoilerPlateCellValues))
     RedTeamTitleCell = ws.cell(startRow, 1)
     RedTeamTitleCell.value = "Red Team"
     RedTeamTitleCell.alignment = Alignment(horizontal='center')
-    RedTeamTitleCell.font = Font(size=14,bold=True)
+    RedTeamTitleCell.font = Font(size=14, bold=True)
 
     ws.merge_cells(start_row=startRow, start_column=len(BoilerPlateCellValues)+2,
                    end_row=startRow, end_column=(len(BoilerPlateCellValues)*2)+1)
     BlueTeamTitleCell = ws.cell(startRow, len(BoilerPlateCellValues)+2)
     BlueTeamTitleCell.value = "Blue Team"
     BlueTeamTitleCell.alignment = Alignment(horizontal='center')
-    BlueTeamTitleCell.font = Font(size=14,bold=True)
+    BlueTeamTitleCell.font = Font(size=14, bold=True)
 
     ws.merge_cells(start_row=startRow+1, start_column=1,
                    end_row=startRow+1, end_column=(len(BoilerPlateCellValues)*2)+1)

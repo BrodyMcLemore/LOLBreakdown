@@ -63,17 +63,17 @@ RegionServer = {
     "Japan": "jp1"
 }
 VariableCall = {
-    "SummonerName" : "summonerName",
-    "ChampionName" : "championName",
-    "KDA" : "kills",
-    "Roll" : "teamPosition",
-    "Level" : "champLevel",
-    "Runes" : "runes",
-    "TotalDamage" : "totalDamageDealt",
-    "VisionScore" : "visionScore",
-    "SummonerSpells" : "summonerSpells",
-    "CreepScore" : "totalMinionsKilled",
-    "Items" : "inventory"
+    "SummonerName": "summonerName",
+    "ChampionName": "championName",
+    "KDA": "kills",
+    "Roll": "teamPosition",
+    "Level": "champLevel",
+    "Runes": "runes",
+    "TotalDamage": "totalDamageDealt",
+    "VisionScore": "visionScore",
+    "SummonerSpells": "summonerSpells",
+    "CreepScore": "totalMinionsKilled",
+    "Items": "inventory"
 }
 GameCount = 0
 Row = 1
@@ -106,17 +106,21 @@ def GetCallVal():
     if Items.get() == 1:
         CallValues.append(VariableCall["Items"])
     return CallValues
+
+
 def Run():
     Region = RegionServer[RegionVal.get()]
     AccountName = PlayerName.get()
     try:
         AccountInfo = watcher.summoner.by_name(Region, AccountName)
     except:
-        messagebox.showerror("Name Error","The Player Name you have entered is not valid, please try again.")
+        messagebox.showerror(
+            "Name Error", "The Player Name you have entered is not valid, please try again.")
         return
     MatchList = watcher.match.matchlist_by_puuid(Region, AccountInfo["puuid"])
     wb = Workbook()
-    OutputGames(Region, MatchList, GameCount, Row, GetCallVal(), watcher, wb,AccountName,GetCurrentVersion())
+    OutputGames(Region, MatchList, GameCount, Row, GetCallVal(),
+                watcher, wb, AccountName, GetCurrentVersion())
     if SaveBook(wb, AccountName) == "Success":
         messagebox.showinfo(
             "Success", "Your Game Data has been saved to Output/"+AccountName)
@@ -128,42 +132,50 @@ def Run():
 # Building the Front End
 # Player Name and Region Labels and Entries
 PlayerNameLabel = ttk.Label(MainFrame, text="Key Player Name:", font=(
-    'calibre', 12, 'bold'), anchor="center",takefocus=True)
+    'calibre', 12, 'bold'), anchor="center", takefocus=True)
 RegionLabel = ttk.Label(MainFrame, text="Region:", font=(
     'calibre', 12, 'bold'), justify="left", anchor="center")
 PlayerNameEntry = ttk.Entry(
     MainFrame, textvariable=PlayerName, font=('calibre', 10, 'normal'))
 RegionComboBox = ttk.Combobox(MainFrame, textvariable=RegionVal,
                               values=RegionCommon, state="readonly", font=('calibre', 10, 'normal'))
-ProgressBar = ttk.Progressbar(MainFrame,orient="horizontal",length=300  ,mode='determinate')
+ProgressBar = ttk.Progressbar(
+    MainFrame, orient="horizontal", length=300, mode='determinate')
 
 # CallValue Checkboxes and Label
-CallValuesLabel = ttk.Label(MainFrame,text="Reported Values",font=(
+CallValuesLabel = ttk.Label(MainFrame, text="Reported Values", font=(
     'calibre', 12, 'bold'), anchor="center")
-SummonerNameBox = ttk.Checkbutton(MainFrame,text="Summoner Name",variable=SummonerName)
-ChampionNameBox = ttk.Checkbutton(MainFrame,text="Champion Name",variable=ChampionName)
-KDABox = ttk.Checkbutton(MainFrame,text="KDA",variable= KDA)
-RollBox = ttk.Checkbutton(MainFrame,text="Position",variable= Roll)
-LevelBox = ttk.Checkbutton(MainFrame,text="Champion Level",variable= Level)
-RunesBox = ttk.Checkbutton(MainFrame,text="Primary and Secondary Runes",variable= Runes)
-TotalDamageBox = ttk.Checkbutton(MainFrame,text="Total Damage Delt",variable= TotalDamage)
-VisionScoreBox = ttk.Checkbutton(MainFrame,text="Vision Score",variable= VisionScore)
-SummonerSpellsBox = ttk.Checkbutton(MainFrame,text="Summoner Spells",variable= SummonerSpells)
-CreepScoreBox = ttk.Checkbutton(MainFrame,text="Creep Score",variable= CreepScore)
-ItemsBox = ttk.Checkbutton(MainFrame,text="Items",variable= Items)
+SummonerNameBox = ttk.Checkbutton(
+    MainFrame, text="Summoner Name", variable=SummonerName)
+ChampionNameBox = ttk.Checkbutton(
+    MainFrame, text="Champion Name", variable=ChampionName)
+KDABox = ttk.Checkbutton(MainFrame, text="KDA", variable=KDA)
+RollBox = ttk.Checkbutton(MainFrame, text="Position", variable=Roll)
+LevelBox = ttk.Checkbutton(MainFrame, text="Champion Level", variable=Level)
+RunesBox = ttk.Checkbutton(
+    MainFrame, text="Primary and Secondary Runes", variable=Runes)
+TotalDamageBox = ttk.Checkbutton(
+    MainFrame, text="Total Damage Delt", variable=TotalDamage)
+VisionScoreBox = ttk.Checkbutton(
+    MainFrame, text="Vision Score", variable=VisionScore)
+SummonerSpellsBox = ttk.Checkbutton(
+    MainFrame, text="Summoner Spells", variable=SummonerSpells)
+CreepScoreBox = ttk.Checkbutton(
+    MainFrame, text="Creep Score", variable=CreepScore)
+ItemsBox = ttk.Checkbutton(MainFrame, text="Items", variable=Items)
 
 # Submit button
 SubmitButton = ttk.Button(MainFrame, text="Submit", command=Run)
 
-# Player Name and Region input positions 
+# Player Name and Region input positions
 PlayerNameLabel.grid(column=1, row=1, pady=5)
 PlayerNameEntry.grid(column=2, row=1)
 RegionLabel.grid(column=1, row=2, pady=5)
 RegionComboBox.grid(column=2, row=2,)
 
-# CallValues Checkboxes and Label positions 
-CallValuesLabel.grid(column=1,row=3,columnspan=3)
-SummonerNameBox.grid(column=1,row=4, pady=2)
+# CallValues Checkboxes and Label positions
+CallValuesLabel.grid(column=1, row=3, columnspan=3)
+SummonerNameBox.grid(column=1, row=4, pady=2)
 ChampionNameBox.grid(column=2, row=4, pady=2,)
 KDABox.grid(column=3, row=4, pady=2,)
 RollBox.grid(column=1, row=5, pady=2,)
@@ -176,10 +188,8 @@ CreepScoreBox.grid(column=1, row=7, pady=2,)
 ItemsBox.grid(column=2, row=7, pady=2,)
 
 
-
 # Submit button position
-SubmitButton.grid(column=1, row=8, pady=2,columnspan=3)
-
+SubmitButton.grid(column=1, row=8, pady=2, columnspan=3)
 
 
 # Running the Window

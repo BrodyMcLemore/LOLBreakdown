@@ -6,9 +6,7 @@ from datetime import datetime
 def MakeBoilerPlateCells(worksheet, startRow, matchDetail,CellValues):
     ws = worksheet
     BoilerPlateCellValues = CellValues
-
-    ws.merge_cells(start_row=startRow, start_column=1,
-                   end_row=startRow, end_column=len(BoilerPlateCellValues))
+    ws.merge_cells(start_row=startRow, start_column=1, end_row=startRow, end_column=len(BoilerPlateCellValues))
     RedTeamTitleCell = ws.cell(startRow, 1)
     RedTeamTitleCell.value = "Red Team"
     RedTeamTitleCell.alignment = Alignment(horizontal='center')

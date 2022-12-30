@@ -12,7 +12,7 @@ from Project_Files.DictCalls import GetCurrentVersion
 MainWin = Tk()
 MainWin.title("LOL Breakdown")
 MainWin.resizable(width=False, height=False)
-MainWin.geometry("300x200")
+MainWin.geometry("500x250")
 MainWin.iconbitmap("Project_Files\Mascot.ico")
 
 # Handling the Frame
@@ -24,7 +24,18 @@ MainFrame.grid(column=0, row=0, sticky="NW")
 # App Variables
 PlayerName = StringVar()
 RegionVal = StringVar()
-SummonerName = IntVar(value=0)
+SummonerName = IntVar(value=1)
+ChampionName = IntVar(value=1)
+KDA = IntVar(value=0)
+Roll = IntVar(value=0)
+Level = IntVar(value=0)
+Runes = IntVar(value=0)
+TotalDamage = IntVar(value=0)
+VisionScore = IntVar(value=0)
+SummonerSpells = IntVar(value=0)
+CreepScore = IntVar(value=0)
+Items = IntVar(value=0)
+
 
 # Working Variables
 RegionCommon = [
@@ -51,20 +62,57 @@ RegionServer = {
     "Turkey": "tr1",
     "Japan": "jp1"
 }
-CallValues = ["runes"]
+VariableCall = {
+    "SummonerName" : "summonerName",
+    "ChampionName" : "championName",
+    "KDA" : "kills",
+    "Roll" : "teamPosition",
+    "Level" : "champLevel",
+    "Runes" : "runes",
+    "TotalDamage" : "totalDamageDealt",
+    "VisionScore" : "visionScore",
+    "SummonerSpells" : "summonerSpells",
+    "CreepScore" : "totalMinionsKilled",
+    "Items" : "items"
+}
 GameCount = 0
 Row = 1
 watcher = LolWatcher(API_KEY)
 
 
 # Functions and Backend
+def GetCallVal():
+    CallValues = []
+    if SummonerName.get() == 1:
+        CallValues.append(VariableCall["SummonerName"])
+    if ChampionName.get() == 1:
+        CallValues.append(VariableCall["ChampionName"])
+    if KDA.get() == 1:
+        CallValues.append(VariableCall["KDA"])
+    if Roll.get() == 1:
+        CallValues.append(VariableCall["Roll"])
+    if Level.get() == 1:
+        CallValues.append(VariableCall["Level"])
+    if Runes.get() == 1:
+        CallValues.append(VariableCall["Runes"])
+    if TotalDamage.get() == 1:
+        CallValues.append(VariableCall["TotalDamage"])
+    if VisionScore.get() == 1:
+        CallValues.append(VariableCall["VisionScore"])
+    if SummonerSpells.get() == 1:
+        CallValues.append(VariableCall["SummonerSpells"])
+    if CreepScore.get() == 1:
+        CallValues.append(VariableCall["CreepScore"])
+    if Items.get() == 1:
+        CallValues.append(VariableCall["Items"])
+    return CallValues
 def Run():
     Region = RegionServer[RegionVal.get()]
     AccountName = PlayerName.get()
     AccountInfo = watcher.summoner.by_name(Region, AccountName)
     MatchList = watcher.match.matchlist_by_puuid(Region, AccountInfo["puuid"])
     wb = Workbook()
-    OutputGames(Region, MatchList, GameCount, Row, CallValues, watcher, wb,AccountName,GetCurrentVersion())
+    OutputGames(Region, MatchList, GameCount, Row, GetCallVal(), watcher, wb,AccountName,GetCurrentVersion())
     if SaveBook(wb, AccountName) == "Success":
         messagebox.showinfo(
             "Success", "Your Game Data has been saved to a new folder named 'Output'.")
@@ -75,7 +123,7 @@ def Run():
 
 # Building the Front End
 # Player Name and Region Labels and Entries
-PlayerNameLabel = ttk.Label(MainFrame, text="Player Name:", font=(
+PlayerNameLabel = ttk.Label(MainFrame, text="Key Player Name:", font=(
     'calibre', 12, 'bold'), anchor="center",takefocus=True)
 RegionLabel = ttk.Label(MainFrame, text="Region:", font=(
     'calibre', 12, 'bold'), justify="left", anchor="center")
@@ -89,7 +137,16 @@ RegionComboBox = ttk.Combobox(MainFrame, textvariable=RegionVal,
 CallValuesLabel = ttk.Label(MainFrame,text="Reported Values",font=(
     'calibre', 12, 'bold'), anchor="center")
 SummonerNameBox = ttk.Checkbutton(MainFrame,text="Summoner Name",variable=SummonerName)
-
+ChampionNameBox = ttk.Checkbutton(MainFrame,text="Champion Name",variable=ChampionName)
+KDABox = ttk.Checkbutton(MainFrame,text="KDA",variable= KDA)
+RollBox = ttk.Checkbutton(MainFrame,text="Position",variable= Roll)
+LevelBox = ttk.Checkbutton(MainFrame,text="Champion Level",variable= Level)
+RunesBox = ttk.Checkbutton(MainFrame,text="Primary and Secondary Runes",variable= Runes)
+TotalDamageBox = ttk.Checkbutton(MainFrame,text="Total Damage Delt",variable= TotalDamage)
+VisionScoreBox = ttk.Checkbutton(MainFrame,text="Vision Score",variable= VisionScore)
+SummonerSpellsBox = ttk.Checkbutton(MainFrame,text="Summoner Spells",variable= SummonerSpells)
+CreepScoreBox = ttk.Checkbutton(MainFrame,text="Creep Score",variable= CreepScore)
+ItemsBox = ttk.Checkbutton(MainFrame,text="Items",variable= Items)
 
 # Submit button
 SubmitButton = ttk.Button(MainFrame, text="Submit", command=Run)
@@ -102,10 +159,22 @@ RegionComboBox.grid(column=2, row=2,)
 
 # CallValues Checkboxes and Label positions 
 CallValuesLabel.grid(column=1,row=3,columnspan=3)
-SummonerNameBox.grid(column=1,row=4)
+SummonerNameBox.grid(column=1,row=4, pady=2)
+ChampionNameBox.grid(column=2, row=4, pady=2,)
+KDABox.grid(column=3, row=4, pady=2,)
+RollBox.grid(column=1, row=5, pady=2,)
+LevelBox.grid(column=2, row=5, pady=2,)
+RunesBox.grid(column=3, row=5, pady=2,)
+TotalDamageBox.grid(column=1, row=6, pady=2,)
+VisionScoreBox.grid(column=2, row=6, pady=2,)
+SummonerSpellsBox.grid(column=3, row=6, pady=2,)
+CreepScoreBox.grid(column=1, row=7, pady=2,)
+ItemsBox.grid(column=2, row=7, pady=2,)
+
 
 # Submit button position
-SubmitButton.grid(column=1, row=5, pady=5, columnspan=2)
+SubmitButton.grid(column=1, row=8, pady=2,columnspan=3)
+
 
 # Setting the Default value for Widgets
 RegionComboBox.set("North America")

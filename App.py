@@ -13,7 +13,7 @@ MainWin = Tk()
 MainWin.title("LOL Breakdown")
 MainWin.resizable(width=False, height=False)
 MainWin.geometry("500x250")
-MainWin.iconbitmap("Project_Files\Mascot.ico")
+MainWin.iconbitmap("Project_Files\Logo.ico")
 
 # Handling the Frame
 MainFrame = Frame(MainWin)

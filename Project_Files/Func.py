@@ -48,7 +48,7 @@ def OutputRed(worksheet, MatchDetail, startRow, CallValues, CurrentVersion):
     StartWorkRow = startRow + 3
     for row in range(5):
         for col in range(len(CallValues)):
-            if CallValues[col] == "kills":
+            if CallValues[col] == "KDA":
                 CalledValue = ws.cell(StartWorkRow+row, col+1)
                 Kills = str(MatchDetail["info"]['participants'][row]["kills"])
                 Deaths = str(MatchDetail["info"]
@@ -86,6 +86,20 @@ def OutputRed(worksheet, MatchDetail, startRow, CallValues, CurrentVersion):
                         except:
                             continue
                 CalledValue.value = str(Runes[0] + " and " + Runes[4])
+
+            elif CallValues[col] == "creepScore":
+                CalledValue = ws.cell(StartWorkRow+row, col+1)
+                MinionsKilled = MatchDetail["info"]['participants'][row]["totalMinionsKilled"]
+                NeutralMinionsKilled = MatchDetail["info"]['participants'][row]["neutralMinionsKilled"]
+                CalledValue.value = str(int(MinionsKilled+NeutralMinionsKilled))
+            
+            elif CallValues[col] == "gameResult":
+                CalledValue = ws.cell(StartWorkRow+row, col+1)
+                if MatchDetail["info"]['participants'][row]["win"]:
+                   CalledValue.value = "Won"
+                else:
+                    CalledValue.value = "Lost" 
+
             else:
                 CalledValue = ws.cell(StartWorkRow+row, col+1)
                 CalledValue.value = MatchDetail["info"]['participants'][row][CallValues[col]]
@@ -96,7 +110,7 @@ def OutputBlue(worksheet, MatchDetail, startRow, CallValues, CurrentVersion):
     StartWorkRow = startRow + 3
     for row in range(5):
         for col in range(len(CallValues)):
-            if CallValues[col] == "kills":
+            if CallValues[col] == "KDA":
                 CalledValue = ws.cell(StartWorkRow+row, col+2+len(CallValues))
                 Kills = str(MatchDetail["info"]
                             ['participants'][row+5]["kills"])
@@ -135,7 +149,20 @@ def OutputBlue(worksheet, MatchDetail, startRow, CallValues, CurrentVersion):
                         except:
                             continue
                 CalledValue.value = str(Runes[0] + " and " + Runes[4])
+            
+            elif CallValues[col] == "creepScore":
+                CalledValue = ws.cell(StartWorkRow+row, col+2+len(CallValues))
+                MinionsKilled = MatchDetail["info"]['participants'][row+5]["totalMinionsKilled"]
+                NeutralMinionsKilled = MatchDetail["info"]['participants'][row+5]["neutralMinionsKilled"]
+                CalledValue.value = str(int(MinionsKilled+NeutralMinionsKilled))
+            
+            elif CallValues[col] == "gameResult":
+                CalledValue = ws.cell(StartWorkRow+row, col+2+len(CallValues))
+                if MatchDetail["info"]['participants'][row+5]["win"]:
+                   CalledValue.value = "Won"
+                else:
+                    CalledValue.value = "Lost"
+            
             else:
                 CalledValue = ws.cell(StartWorkRow+row, col+2+len(CallValues))
-                CalledValue.value = MatchDetail["info"]['participants'][row +
-                                                                        5][CallValues[col]]
+                CalledValue.value = MatchDetail["info"]['participants'][row + 5][CallValues[col]]

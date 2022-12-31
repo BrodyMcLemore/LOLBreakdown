@@ -37,6 +37,7 @@ VisionScore = IntVar(value=0)
 SummonerSpells = IntVar(value=0)
 CreepScore = IntVar(value=0)
 Items = IntVar(value=0)
+GameResult = IntVar(value=0)
 
 
 # Working Variables and Dictionaries 
@@ -68,15 +69,16 @@ RegionServer = {
 VariableCall = {
     "SummonerName": "summonerName",
     "ChampionName": "championName",
-    "KDA": "kills",
+    "KDA": "KDA",
     "Roll": "teamPosition",
     "Level": "champLevel",
     "Runes": "runes",
     "TotalDamage": "totalDamageDealt",
     "VisionScore": "visionScore",
     "SummonerSpells": "summonerSpells",
-    "CreepScore": "totalMinionsKilled",
-    "Items": "inventory"
+    "CreepScore": "creepScore",
+    "Items": "inventory",
+    "GameResult" : "gameResult"
 }
 
 # Working Variables 
@@ -117,6 +119,8 @@ def GetCallVal():
         CallValues.append(VariableCall["CreepScore"])
     if Items.get() == 1:
         CallValues.append(VariableCall["Items"])
+    if GameResult.get() == 1:
+        CallValues.append(VariableCall["GameResult"])
     return CallValues
 
 
@@ -179,6 +183,7 @@ SummonerSpellsBox = ttk.Checkbutton(
 CreepScoreBox = ttk.Checkbutton(
     MainFrame, text="Creep Score", variable=CreepScore)
 ItemsBox = ttk.Checkbutton(MainFrame, text="Items", variable=Items)
+GameResultBox = ttk.Checkbutton(MainFrame,text="Game Result (Win or Lose)",variable=GameResult)
 
 # Submit button
 SubmitButton = ttk.Button(MainFrame, text="Submit", command=Run)
@@ -202,6 +207,7 @@ VisionScoreBox.grid(column=2, row=6, pady=2,)
 SummonerSpellsBox.grid(column=3, row=6, pady=2,)
 CreepScoreBox.grid(column=1, row=7, pady=2,)
 ItemsBox.grid(column=2, row=7, pady=2,)
+GameResultBox.grid(column=3, row=7, pady=2,)
 
 
 # Submit button position

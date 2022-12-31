@@ -26,5 +26,6 @@ Once in the app there are a number of options and requirements.
     - Summoner Spells
     - Creep Score (CS)
     - Items
+    - Game Result
 
 Once your preferred option have selected, the submit button will output the Excel file to your chosen directory.  

@@ -1,7 +1,7 @@
 # LOLBreakdown
 ## Download 
 Follow the installer instructions.
-> [Download Link](https://github.com/BrodyMcLemore/LOLBreakdown/blob/main/LOLBreakdown_Setup.exe "download")
+> [Download Link](https://github.com/BrodyMcLemore/LOLBreakdown/raw/main/LOLBreakdown_Setup.exe)
 
 ## Outline
 ### Purpose

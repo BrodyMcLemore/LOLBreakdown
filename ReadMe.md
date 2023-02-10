@@ -3,7 +3,6 @@
 Follow the installer instructions.
 > [Download Link](https://github.com/BrodyMcLemore/LOLBreakdown/raw/main/LOLBreakdown_Setup.exe)
 
-## Outline
 ### Purpose
 LOLBreakdown is a small project that allows for League of Legends game data to be compiled and outputted to a single Excel file.
 ### Technical Breakdown

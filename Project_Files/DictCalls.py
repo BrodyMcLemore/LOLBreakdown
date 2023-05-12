@@ -1,6 +1,9 @@
 from urllib.request import urlopen
 import ssl
 import json
+import os
+import getpass
+
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
@@ -11,6 +14,13 @@ class MakeDict(dict):
 
     def add(self, key, value):
         self[key] = value
+
+
+def MakeProgramFiles():
+    # Making the 'CurrVer" file that stores the current version of the game
+    # Along with more files to store local copies of all the game data 
+    # This will reduce load times 
+
 
 
 def GetCurrentVersion():

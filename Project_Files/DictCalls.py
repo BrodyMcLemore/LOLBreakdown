@@ -15,19 +15,10 @@ class MakeDict(dict):
     def add(self, key, value):
         self[key] = value
 
-
-def MakeProgramFiles():
-    # Making the 'CurrVer" file that stores the current version of the game
-    # Along with more files to store local copies of all the game data 
-    # This will reduce load times 
-
-
-
 def GetCurrentVersion():
     return json.loads(urlopen("https://ddragon.leagueoflegends.com/api/versions.json").read())[0]
 
-
-def SummonerSpellDict(CurrentVersion):
+def MakeSummonerSpellDict(CurrentVersion):
     SummonerSpellsDict = MakeDict()
     ListSummonerSpells = json.loads(urlopen("https://ddragon.leagueoflegends.com/cdn/"+str(
         CurrentVersion)+"/data/en_US/summoner.json").read())["data"]
@@ -39,7 +30,7 @@ def SummonerSpellDict(CurrentVersion):
     return SummonerSpellsDict
 
 
-def ItemDict(CurrentVersion):
+def MakeItemDict(CurrentVersion):
     ItemsDict = MakeDict()
     ListItems = json.loads(urlopen("https://ddragon.leagueoflegends.com/cdn/" +
                            str(CurrentVersion)+"/data/en_US/item.json").read())["data"]
@@ -53,7 +44,7 @@ def ItemDict(CurrentVersion):
     return ItemsDict
 
 
-def RuneDict(CurrentVersion):
+def MakeRuneDict(CurrentVersion):
     RunesDict = MakeDict()
     ListRunes = json.loads(urlopen("https://ddragon.leagueoflegends.com/cdn/" +
                            str(CurrentVersion)+"/data/en_US/runesReforged.json").read())
@@ -69,3 +60,65 @@ def RuneDict(CurrentVersion):
                 except:
                     continue
     return RunesDict
+
+def MakeProgramFiles():
+    path = os.path.join(os.getenv("APPDATA"), "LOLBreakdown")
+    if not os.path.exists(path):
+        os.mkdir(path)
+
+    CurrentVersionFilePath = os.path.join(path, "CurrentVersion.json")
+    SummonerSpellsFilePath = os.path.join(path, "SummonerSpells.json")
+    ItemsFilePath = os.path.join(path, "Items.json")
+    RunesFilePath = os.path.join(path, "Runes.json")
+
+    listOfPaths = [
+        CurrentVersionFilePath,
+        SummonerSpellsFilePath,
+        ItemsFilePath,
+        RunesFilePath
+        ]
+
+    for _file in listOfPaths:
+        if not os.path.exists(_file):
+            file = open(_file, "w+")
+            file.close()
+        
+    with open(CurrentVersionFilePath, "r+") as CurrentVersionFile:
+        try:
+            localVersion = json.load(CurrentVersionFile)[0]
+            onlineVersion = json.loads(urlopen("https://ddragon.leagueoflegends.com/api/versions.json").read())[0]
+        except:
+            data = json.loads(urlopen("https://ddragon.leagueoflegends.com/api/versions.json").read())
+            json.dump(data ,CurrentVersionFile, indent=1)
+            localVersion = data[0]
+            onlineVersion = json.loads(urlopen("https://ddragon.leagueoflegends.com/api/versions.json").read())[0]
+            json.dump(MakeSummonerSpellDict(onlineVersion), open(SummonerSpellsFilePath, "r+"), indent=1)
+            json.dump(MakeItemDict(onlineVersion), open(ItemsFilePath, "r+"), indent=1)
+            json.dump(MakeRuneDict(onlineVersion), open(RunesFilePath, "r+"), indent=1)
+
+
+        if localVersion != onlineVersion:
+            onlineData = json.loads(urlopen("https://ddragon.leagueoflegends.com/api/versions.json").read())
+            json.dump(onlineData ,CurrentVersionFile, indent=1)
+            json.dump(MakeSummonerSpellDict(onlineVersion), open(SummonerSpellsFilePath, "r+"), indent=1)
+            json.dump(MakeItemDict(onlineVersion), open(ItemsFilePath, "r+"), indent=1)
+            json.dump(MakeRuneDict(onlineVersion), open(RunesFilePath, "r+"), indent=1)
+
+
+
+
+def GetSummonerSpellDict():
+    path = os.path.join(os.getenv("APPDATA"), "LOLBreakdown", "SummonerSpells.json")
+    SummonerSpells = json.load(open(path, "r+"))
+    return SummonerSpells
+
+
+def GetItemDict():
+    path = os.path.join(os.getenv("APPDATA"), "LOLBreakdown", "Items.json")
+    Items = json.load(open(path, "r+"))
+    return Items
+    
+def GetRuneDict():
+    path = os.path.join(os.getenv("APPDATA"), "LOLBreakdown", "Runes.json")
+    Runes = json.load(open(path, "r+"))
+    return Runes

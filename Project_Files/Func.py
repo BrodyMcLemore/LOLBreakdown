@@ -4,28 +4,29 @@ from riotwatcher import LolWatcher
 import os
 from Project_Files.DictCalls import *
 from tkinter import ttk
-from tkinter.filedialog import askdirectory
+from tkinter.filedialog import asksaveasfilename
 
 
 def SaveBook(Workbook, PlayerName):
     wb = Workbook
-    FileLocation =  askdirectory()
-    if not os.path.exists(FileLocation+"/Output"):
-        os.mkdir(str(FileLocation+"/Output"))
+    savedFile = asksaveasfilename(
+        filetypes=[("Excel File", ".xlsx")],
+        defaultextension=".xlsx",
+        title="Save LOLBreakdown Output",
+        initialfile=PlayerName,
+        confirmoverwrite=False
+    )
+
+    if savedFile:
         try:
-            wb.save(str(FileLocation)+"/Output/" + PlayerName + ".xlsx")
+            wb.save(savedFile)
             return "Success"
         except:
             return "Fail"
     else:
-        try:
-            wb.save(str(FileLocation)+"/Output/" + PlayerName + ".xlsx")
-            return "Success"
-        except:
-            return "Fail"
+        return "Fail"
 
-
-def OutputGames(Region, MatchList, GameCount, Row, CallValues, Watcher, Workbook, PlayerName, CurrentVersion):
+def OutputGames(Region, MatchList, GameCount, Row, CallValues, Watcher, Workbook, PlayerName):
     watcher = Watcher
     wb = Workbook
     wb.create_sheet(str(PlayerName))
@@ -35,15 +36,15 @@ def OutputGames(Region, MatchList, GameCount, Row, CallValues, Watcher, Workbook
             MakeBoilerPlateCells(wb[str(PlayerName)],
                                  Row, MatchDetail, CallValues)
             OutputRed(wb[str(PlayerName)], MatchDetail,
-                      Row, CallValues, CurrentVersion)
+                      Row, CallValues)
             OutputBlue(wb[str(PlayerName)], MatchDetail,
-                       Row, CallValues, CurrentVersion)
+                       Row, CallValues)
             Row += 8
         GameCount += 1
     del wb["Sheet"]
 
 
-def OutputRed(worksheet, MatchDetail, startRow, CallValues, CurrentVersion):
+def OutputRed(worksheet, MatchDetail, startRow, CallValues):
     ws = worksheet
     StartWorkRow = startRow + 3
     for row in range(5):
@@ -60,7 +61,7 @@ def OutputRed(worksheet, MatchDetail, startRow, CallValues, CurrentVersion):
             elif CallValues[col] == "inventory":
                 Items = ["item0", "item1", "item2", "item3", "item4", "item5"]
                 ItemNames = []
-                ItemsDict = ItemDict(CurrentVersion)
+                ItemsDict = GetItemDict()
                 CalledValue = ws.cell(StartWorkRow+row, col+1)
                 for i in range(5):
                     if str(MatchDetail["info"]['participants'][row][Items[i]]) != "0":
@@ -69,13 +70,13 @@ def OutputRed(worksheet, MatchDetail, startRow, CallValues, CurrentVersion):
                 CalledValue.value = str(str(", ".join(ItemNames)))
 
             elif CallValues[col] == "summonerSpells":
-                SummonerSpells = SummonerSpellDict(CurrentVersion)
+                SummonerSpells = GetSummonerSpellDict()
                 CalledValue = ws.cell(StartWorkRow+row, col+1)
                 CalledValue.value = str(SummonerSpells[str(MatchDetail["info"]['participants'][row]["summoner1Id"])]) + " and " + str(
                     SummonerSpells[str(MatchDetail["info"]['participants'][row+5]["summoner2Id"])])
 
             elif CallValues[col] == "runes":
-                RunesDict = RuneDict(CurrentVersion)
+                RunesDict = GetRuneDict()
                 CalledValue = ws.cell(StartWorkRow+row, col+1)
                 Runes = []
                 for y in range(3):
@@ -105,7 +106,7 @@ def OutputRed(worksheet, MatchDetail, startRow, CallValues, CurrentVersion):
                 CalledValue.value = MatchDetail["info"]['participants'][row][CallValues[col]]
 
 
-def OutputBlue(worksheet, MatchDetail, startRow, CallValues, CurrentVersion):
+def OutputBlue(worksheet, MatchDetail, startRow, CallValues):
     ws = worksheet
     StartWorkRow = startRow + 3
     for row in range(5):
@@ -123,7 +124,7 @@ def OutputBlue(worksheet, MatchDetail, startRow, CallValues, CurrentVersion):
             elif CallValues[col] == "inventory":
                 Items = ["item0", "item1", "item2", "item3", "item4", "item5"]
                 ItemNames = []
-                ItemsDict = ItemDict(CurrentVersion)
+                ItemsDict = GetItemDict()
                 CalledValue = ws.cell(StartWorkRow+row, col+2+len(CallValues))
                 for i in range(5):
                     if str(MatchDetail["info"]['participants'][row+5][Items[i]]) != "0":
@@ -132,13 +133,13 @@ def OutputBlue(worksheet, MatchDetail, startRow, CallValues, CurrentVersion):
                 CalledValue.value = str(str(", ".join(ItemNames)))
 
             elif CallValues[col] == "summonerSpells":
-                SummonerSpells = SummonerSpellDict(CurrentVersion)
+                SummonerSpells = GetSummonerSpellDict()
                 CalledValue = ws.cell(StartWorkRow+row, col+2+len(CallValues))
                 CalledValue.value = str(SummonerSpells[str(MatchDetail["info"]['participants'][row+5]["summoner1Id"])]) + " and " + str(
                     SummonerSpells[str(MatchDetail["info"]['participants'][row+5]["summoner2Id"])])
 
             elif CallValues[col] == "runes":
-                RunesDict = RuneDict(CurrentVersion)
+                RunesDict = GetRuneDict()
                 CalledValue = ws.cell(StartWorkRow+row, col+2+len(CallValues))
                 Runes = []
                 for y in range(3):

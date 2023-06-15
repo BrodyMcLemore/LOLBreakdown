@@ -4,7 +4,7 @@ from Project_Files.Func import OutputGames, SaveBook
 from openpyxl import Workbook
 from riotwatcher import LolWatcher
 from Project_Files.config import API_KEY
-from Project_Files.DictCalls import GetCurrentVersion
+from Project_Files.DictCalls import MakeProgramFiles
 import os 
 
 
@@ -127,6 +127,7 @@ def GetCallVal():
 def Run():
     Region = RegionServer[RegionVal.get()]
     AccountName = PlayerName.get()
+    MakeProgramFiles()
     try:
         AccountInfo = watcher.summoner.by_name(Region, AccountName)
     except:
@@ -140,10 +141,10 @@ def Run():
     else:
         wb = Workbook()
         OutputGames(Region, MatchList, GameCount, Row, GetCallVal(),
-                    watcher, wb, AccountName, GetCurrentVersion())
+                    watcher, wb, AccountName)
         if SaveBook(wb, AccountName) == "Success":
             messagebox.showinfo(
-                "Success", "Your Game Data has been saved to Output/"+AccountName)
+                "Success", "Your Game Data has been saved.")
         elif SaveBook(wb, AccountName) == "Fail":
             messagebox.showerror(
                 "Failure", "Your Game Data did NOT save correctly, please close the file and try again.")
@@ -175,7 +176,7 @@ LevelBox = ttk.Checkbutton(MainFrame, text="Champion Level", variable=Level)
 RunesBox = ttk.Checkbutton(
     MainFrame, text="Primary and Secondary Runes", variable=Runes)
 TotalDamageBox = ttk.Checkbutton(
-    MainFrame, text="Total Damage Delt", variable=TotalDamage)
+    MainFrame, text="Total Damage Dealt", variable=TotalDamage)
 VisionScoreBox = ttk.Checkbutton(
     MainFrame, text="Vision Score", variable=VisionScore)
 SummonerSpellsBox = ttk.Checkbutton(
